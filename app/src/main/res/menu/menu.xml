@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/me"
+        app:showAsAction="always"
+        android:title="@string/me"
+        android:visible="false"/>
+
+    <item android:id="@+id/others"
+    app:showAsAction="always"
+    android:title="@string/others"
+    android:visible="false"/>
+
+    <item android:id="@+id/map"
+        app:showAsAction="ifRoom"
+        android:title="@string/map"
+        android:visible="false"/>
+
+</menu>

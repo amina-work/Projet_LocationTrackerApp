@@ -9,12 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -22,7 +29,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     //initializing variables
     RecyclerView recyclerView;
-    ArrayList<ContactModel> arrayList = new ArrayList<ContactModel>();
+    ArrayList<ContactModel> arrayList = new ArrayList<>();
     MainAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,5 +118,18 @@ public class MainActivity extends AppCompatActivity {
             //call check permission method
             checkPermissions();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.map).setVisible(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        startActivity(new Intent(MainActivity.this, Map.class));
+        return super.onOptionsItemSelected(item);
     }
 }
