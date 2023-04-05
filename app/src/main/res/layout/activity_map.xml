@@ -9,10 +9,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavigationBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="79dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="671dp"
+        android:layout_marginTop="652dp"
         android:layout_marginBottom="0dp"
         app:menu="@menu/bottom_nav_menu" />
 

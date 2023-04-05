@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     //initializing variables
     RecyclerView recyclerView;
     ArrayList<ContactModel> arrayList = new ArrayList<ContactModel>();
@@ -35,20 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         // NAVIGATION SETTINGS
         nav = findViewById(R.id.BottomNavigationBar);
-
-        nav.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.contacts:
-                    // do nothing since we're already on the MainActivity
-                    return true;
-                case R.id.map:
-                    // start the SecondActivity
-                    startActivity(new Intent(MainActivity.this, MapActivity.class));
-                    return true;
-                default:
-                    return false;
-            }
-        });
+        nav.setOnNavigationItemSelectedListener(this);
         // NAVIGATION SETTINGS
 
         //assign variable
@@ -58,6 +46,28 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
     }
 
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.map) {
+            // Start the MainActivity
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        } else if (id == R.id.contacts) {
+            // Do nothing (already in the SecondActivity)
+            return true;
+        }
+        return false;
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        // Set the selected item in the menu to be the first one
+        nav.setSelectedItemId(R.id.contacts);
+    }
     private void checkPermissions() {
         //check condition
         if(ContextCompat.checkSelfPermission(MainActivity.this,
