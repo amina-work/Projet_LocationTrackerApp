@@ -9,12 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -24,10 +27,29 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ArrayList<ContactModel> arrayList = new ArrayList<ContactModel>();
     MainAdapter adapter;
+    BottomNavigationView nav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // NAVIGATION SETTINGS
+        nav = findViewById(R.id.BottomNavigationBar);
+
+        nav.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.contacts:
+                    // do nothing since we're already on the MainActivity
+                    return true;
+                case R.id.map:
+                    // start the SecondActivity
+                    startActivity(new Intent(MainActivity.this, MapActivity.class));
+                    return true;
+                default:
+                    return false;
+            }
+        });
+        // NAVIGATION SETTINGS
 
         //assign variable
         recyclerView = findViewById(R.id.recycler_view);
