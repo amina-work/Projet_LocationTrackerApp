@@ -1,3 +1,4 @@
+
 package com.example.locationtrackerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
