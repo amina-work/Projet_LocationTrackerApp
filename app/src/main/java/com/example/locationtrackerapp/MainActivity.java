@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
         return false;
     }
-
     protected void onResume() {
         super.onResume();
 
         // Set the selected item in the menu to be the first one
         nav.setSelectedItemId(R.id.contacts);
     }
+
     private void checkPermissions() {
         //check condition
         if(ContextCompat.checkSelfPermission(MainActivity.this,

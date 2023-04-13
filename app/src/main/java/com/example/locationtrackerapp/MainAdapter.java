@@ -1,10 +1,12 @@
 package com.example.locationtrackerapp;
 
 import android.app.Activity;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +58,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             //Asign variables
             tvName = itemView.findViewById(R.id.tv_name);
             tvNumber = itemView.findViewById(R.id.tv_number);
+
+            //send location request to contact
+            SmsManager smsManager = SmsManager.getDefault();
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        smsManager.sendTextMessage(tvNumber.getText().toString(), null, "send me location", null, null);
+                        Toast.makeText(activity.getApplication(), "sms sent ... please don't stop the app", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(activity.getApplication(), "failed to send sms", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }
