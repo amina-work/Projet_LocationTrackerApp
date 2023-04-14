@@ -90,7 +90,11 @@ public class Map extends AppCompatActivity {
 
         if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(permissions, 200);
+            return;
         }
+        
+        myLocation();
+        addReceiver();
     }
 
     public void myLocation() {
