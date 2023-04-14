@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED){
             //when permission is not granted => request again
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.READ_CONTACTS}, 100);
+                    new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.SEND_SMS}, 100);
             } else {
             getContactList();
         }
@@ -118,18 +118,5 @@ public class MainActivity extends AppCompatActivity {
             //call check permission method
             checkPermissions();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.map).setVisible(true);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        startActivity(new Intent(MainActivity.this, Map.class));
-        return super.onOptionsItemSelected(item);
     }
 }
