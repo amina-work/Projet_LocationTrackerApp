@@ -45,15 +45,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //check permission
         checkPermissions();
     }
+    //Added so the menu item being clicked will lead back here
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
+        int id = item.getItemId(); //getting the menu items ID's
         if (id == R.id.map) {
             // Start the MainActivity
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
-            finish();
+            finish(); // add this line to finish the current activity
             return true;
         } else if (id == R.id.contacts) {
             // Do nothing (already in the SecondActivity)
@@ -63,9 +71,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
     protected void onResume() {
         super.onResume();
-
         // Set the selected item in the menu to be the first one
-        nav.setSelectedItemId(R.id.contacts);
+        nav.setSelectedItemId(R.id.contacts); //changing menu item colors basically
     }
 
     private void checkPermissions() {
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //Sort by alphabet
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC";
         //Initialize cursor
+        // =>An interface that provides read-only access to the result set of a database query
         Cursor cursor = getContentResolver().query(
                 uri, null, null, null, sort
         );
@@ -100,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 //initialize phone uri
                 Uri uriPhone = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                //intializ selection
+                //initialize selection
                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID+" =?";
-                //intialize phone cursor
+                //initialize phone cursor
                 Cursor phoneCursor = getContentResolver().query(uriPhone, null, selection, new String[]{id}, null);
                 //check condition
                 if (phoneCursor.moveToNext()){
@@ -115,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     model.setNumber(number);
                     //add model in array list
                     arrayList.add(model);
-                    //Close phone curso
+                    //Close phone cursor
                     phoneCursor.close();
                 }
             }

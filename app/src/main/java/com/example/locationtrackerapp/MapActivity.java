@@ -72,7 +72,7 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        setContentView(R.layout.activity_map);
+        //setContentView(R.layout.activity_map);
 
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -113,8 +113,7 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
         builder.setView(locations);
         dialog = builder.create();
     }
-
-
+    // BETWEEN MAINACTIVITY & MAPACTIVITY MENU
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
@@ -122,7 +121,7 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
             // Start the MainActivity
             Intent intent = new Intent(MapActivity.this, MainActivity.class);
             startActivity(intent);
-            finish();
+            finish(); // add this line to finish the current activity
             return true;
         } else if (id == R.id.map) {
             // Do nothing (already in the SecondActivity)
@@ -130,13 +129,58 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
         }
         return false;
     }
-
     protected void onResume() {
         super.onResume();
 
         // Set the selected item in the menu to be the second one
         nav.setSelectedItemId(R.id.map);
     }
+    // BETWEEN MAINACTIVITY & MAPACTIVITY MENU
+
+    public void myLocation() {
+        List<Overlay> mapOverlays = map.getOverlays();
+        me = new MyLocationNewOverlay(map);
+        me.enableMyLocation();
+
+        Bitmap myIcon = BitmapFactory.decodeResource(getResources(), org.osmdroid.library.R.drawable.person);
+        me.setDirectionArrow( myIcon, myIcon);
+
+        mapOverlays.add(me);
+        me.enableFollowLocation();
+    }
+
+    // MAP MENU
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.me).setVisible(true);
+        menu.findItem(R.id.others).setVisible(true);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        GeoPoint goTo;
+        int itemId = item.getItemId();
+        if (itemId == R.id.me) {
+
+            goTo = me.getMyLocation();
+
+            if (goTo == null) mapController.animateTo((IGeoPoint) me.getLastFix());
+            else mapController.animateTo(goTo);
+        } else if(itemId == R.id.others) {
+
+            if (people_labels.size() == 0) {
+                Toast.makeText(getBaseContext(),
+                        "No locations to show, make sure the app is running in the background and has access to SmS",
+                        Toast.LENGTH_SHORT).show();
+                requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.READ_SMS}, 200);
+                return true;
+            } else dialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    // MAP MENU
 
     @SuppressLint("MissingPermission")
     @Override
@@ -160,8 +204,8 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
                             String[] messageBody_ = messageBody.split("\n");
 
                             if (messageBody_.length == 3 && messageBody_[0].equals("geolocation")) {
-                                for(int i = 0; i < people_labels.size(); i++) {
-                                    if(people_labels.get(i).equals(sender)) {
+                                for (int i = 0; i < people_labels.size(); i++) {
+                                    if (people_labels.get(i).equals(sender)) {
                                         people.remove(i);
                                         people_labels.remove(i);
                                         adapter.notifyDataSetChanged();
@@ -182,17 +226,4 @@ public class MapActivity extends AppCompatActivity implements BottomNavigationVi
             registerReceiver(broadcastReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
         }
     }
-
-    public void myLocation() {
-        List<Overlay> mapOverlays = map.getOverlays();
-        me = new MyLocationNewOverlay(map);
-        me.enableMyLocation();
-
-        Bitmap myIcon = BitmapFactory.decodeResource(getResources(), org.osmdroid.library.R.drawable.person);
-        me.setDirectionArrow( myIcon, myIcon);
-
-        mapOverlays.add(me);
-        me.enableFollowLocation();
-    }
-
 }

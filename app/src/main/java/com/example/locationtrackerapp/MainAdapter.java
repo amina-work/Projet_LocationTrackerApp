@@ -35,7 +35,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Initilize contact model
+        //Initialize contact model
         ContactModel model = arrayList.get(position);
 
         //set name
@@ -46,7 +46,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        //REturn array list size
+        //Return array list size
         return arrayList.size();
     }
 
